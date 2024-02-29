@@ -1,11 +1,12 @@
 import express from "express";
 import chats from "./data/dummydata.js";
+import cors from 'cors'
 
 
 const app = express();
 
 
-
+app.use(cors());
 
 
 app.get('/', (req, res) => {
