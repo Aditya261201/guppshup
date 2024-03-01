@@ -6,10 +6,11 @@ import bcrypt from "bcrypt";
 
 // --------------------------------------register user---------------------------------------
 export const registerUser = async (req, res) => {
-    const { name, email, password, pic } = req.body;
+    try {
+        const { name, email, password, pic } = req.body;
 
 
-        if(!name || !email || !password){
+        if (!name || !email || !password) {
             res.status(404).json({
                 success: false,
                 messsage: "Please enter all the fields"
@@ -17,8 +18,8 @@ export const registerUser = async (req, res) => {
         }
 
 
-        const userExists = await User.findOne({email});
-        if(userExists){
+        const userExists = await User.findOne({ email });
+        if (userExists) {
             res.status(404).json({
                 success: false,
                 messsage: "User already exists"
@@ -27,13 +28,13 @@ export const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user  = await User.create({
+        const user = await User.create({
             name,
             email,
             password: hashedPassword,
             pic
         });
-        if(user){
+        if (user) {
             res.status(201).json({
                 _id: user._id,
                 name: user.name,
@@ -41,13 +42,18 @@ export const registerUser = async (req, res) => {
                 pic: user.pic,
                 token: generateToken(user._id)
             })
-        }else{
+        } else {
             res.status(404).json({
                 success: false,
                 messsage: "Failed to create a user"
             });
         }
-
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            messsage: "Please try again with proper credentials"
+        })
+    }
 }
 
 
@@ -55,31 +61,38 @@ export const registerUser = async (req, res) => {
 
 // -----------------------------auth user---------------------------------
 export const authUser = async(req,res) =>{
-    const {email,password}= req.body;
+    try {
+        const { email, password } = req.body;
 
-    
-    const user = await User.findOne({email}).select("+password");
-    const ismatch = await bcrypt.compare(password,user.password);
 
-    if(!user){ 
+        const user = await User.findOne({ email }).select("+password");
+        const ismatch = await bcrypt.compare(password, user.password);
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                messsage: "Invalid email or password"
+            });
+        }
+
+        if (ismatch) {
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                pic: user.pic,
+                token: generateToken(user._id)
+            })
+        } else {
+            res.status(404).json({
+                success: false,
+                messsage: "Invalid email or password"
+            });
+        }
+    } catch (error) {
         res.status(404).json({
             success: false,
-            messsage: "Invalid email or password"
-        });
-    } 
-
-    if(ismatch){
-        res.json({
-            _id : user._id,
-            name: user.name,
-            email: user.email,
-            pic: user.pic,
-            token: generateToken(user._id)
+            messsage: "Please try again with proper credentials"
         })
-    }else{
-        res.status(404).json({
-            success: false,
-            messsage: "Invalid email or password"
-        });
     }
 }
