@@ -1,11 +1,14 @@
 import React , {useState} from 'react'
 import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react'
+import axios from "axios"
+import {useHistory} from "react-router-dom"
 
 
 const Signup = () => {
 
     const toast = useToast();
+    const history = useHistory();
     const [name, setname] = useState("")
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
@@ -58,8 +61,66 @@ const Signup = () => {
         }
     }
 
-    const submitHandler = () =>{
+    const submitHandler =async () =>{
+        setloading(true);
+        if(!name || !email || !password || !confirmpassword){
+            toast({
+                title: 'Please fill all the details',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'top'
+            });
+            setloading(false);
+            return;
+        }
+        if(password != confirmpassword){
+            toast({
+                title: 'Password doesnt match',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'top'
+            });
+            setloading(false);
+            return;
+        }
 
+        try {
+            const config={
+                headers: {
+                    "Content-Type":"application/json",
+                },
+            };
+
+            const response = await axios.post(
+                "http://localhost:4000/api/user",
+                {name,email,password,pic},
+                config
+            );
+            if(response && response.data){
+                const data = response.data;
+            }
+            toast({
+                title: 'Registration Successful',
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                position: 'top'
+            });
+            localStorage.setItem("userInfo",JSON.stringify(data));
+            // history.pushState("http://localhost:4000/api/chat");
+            setloading(false);
+        } catch (error) {
+            toast({
+                title: 'Error occured',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'top'
+            });
+            setloading(false);
+        }
     }
 
 
