@@ -1,9 +1,16 @@
 import express from "express";
 import chats from "./data/dummydata.js";
 import cors from 'cors'
+import { config } from "dotenv"
+import { connectDB } from "./config/db.js";
+
 
 
 const app = express();
+config({
+    path: "./config.env"
+})
+connectDB();
 
 
 app.use(cors());
