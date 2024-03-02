@@ -4,6 +4,7 @@ import cors from 'cors'
 import { config } from "dotenv"
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRoutes.js"
+import chatRouter from "./routes/chatRoutes.js"
 
 
 
@@ -23,16 +24,8 @@ app.get('/', (req, res) => {
 })
 
 app.use("/api/user", userRouter);
+app.use("/api/chat", chatRouter);
 
-
-app.get('/api/chat', (req, res) => {
-    res.send(chats);
-})
-// app.get('/api/chat/:id', (req, res) => {
-//     const id = req.params.id;
-//     const singlechat = chats.find((c) => c._id === id);
-//     res.send(singlechat);
-// })
 
 
 

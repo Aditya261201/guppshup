@@ -2,9 +2,7 @@ import express from "express";
 import { registerUser , authUser , allUsers } from "../controllers/user.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
-const registernewuser = ()=>{
 
-}
 
 const router = express.Router();
 
