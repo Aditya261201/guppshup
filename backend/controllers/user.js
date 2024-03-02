@@ -13,7 +13,7 @@ export const registerUser = async (req, res) => {
         if (!name || !email || !password) {
             res.status(404).json({
                 success: false,
-                messsage: "Please enter all the fields"
+                message: "Please enter all the fields"
             });
         }
 
@@ -22,7 +22,7 @@ export const registerUser = async (req, res) => {
         if (userExists) {
             res.status(404).json({
                 success: false,
-                messsage: "User already exists"
+                message: "User already exists"
             });
         }
 
@@ -45,13 +45,13 @@ export const registerUser = async (req, res) => {
         } else {
             res.status(404).json({
                 success: false,
-                messsage: "Failed to create a user"
+                message: "Failed to create a user"
             });
         }
     } catch (error) {
         res.status(404).json({
             success: false,
-            messsage: "Please try again with proper credentials"
+            message: "Please try again with proper credentials"
         })
     }
 }
@@ -71,7 +71,7 @@ export const authUser = async(req,res) =>{
         if (!user) {
             res.status(404).json({
                 success: false,
-                messsage: "Invalid email or password"
+                message: "Invalid email or password"
             });
         }
 
@@ -86,13 +86,13 @@ export const authUser = async(req,res) =>{
         } else {
             res.status(404).json({
                 success: false,
-                messsage: "Invalid email or password"
+                message: "Invalid email or password"
             });
         }
     } catch (error) {
         res.status(404).json({
             success: false,
-            messsage: "Please try again with proper credentials"
+            message: "Please try again with proper credentials"
         })
     }
 }

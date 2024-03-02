@@ -25,9 +25,9 @@ app.get('/', (req, res) => {
 app.use("/api/user", userRouter);
 
 
-// app.get('/api/chat', (req, res) => {
-//     res.send(chats);
-// })
+app.get('/api/chat', (req, res) => {
+    res.send(chats);
+})
 // app.get('/api/chat/:id', (req, res) => {
 //     const id = req.params.id;
 //     const singlechat = chats.find((c) => c._id === id);

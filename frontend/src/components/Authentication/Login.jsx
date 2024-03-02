@@ -49,8 +49,10 @@ const Login = () => {
             // history.pushState("http://localhost:4000/api/chat");
             setloading(false);
         } catch (error) {
+            // console.log(error);
+            // console.log(error.response.data.messsage);
             toast({
-                title: 'Error occured',
+                title: error.response.data.message,
                 status: 'warning',
                 duration: 5000,
                 isClosable: true,

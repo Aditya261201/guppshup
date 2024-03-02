@@ -113,7 +113,7 @@ const Signup = () => {
             setloading(false);
         } catch (error) {
             toast({
-                title: 'Error occured',
+                title: error.response.data.message,
                 status: 'warning',
                 duration: 5000,
                 isClosable: true,
