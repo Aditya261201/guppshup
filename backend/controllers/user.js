@@ -96,3 +96,25 @@ export const authUser = async(req,res) =>{
         })
     }
 }
+
+
+
+
+
+// -----------------------------all users---------------------------------
+//------------------------------/api/user---------------------------------
+
+
+export const allUsers=async(req,res)=>{
+    const keyword = req.query.search
+    ? {
+            $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } },
+            ]
+    }: { };
+
+    // find all users except the logged in himself
+    const users = await User.find(keyword).find({_id:{$ne:req.user._id}});
+    res.send(users);
+}
