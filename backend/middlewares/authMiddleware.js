@@ -4,28 +4,23 @@ import { User } from "../models/userModel.js";
 export const protect = async (req, res, next) => {
     let token;
 
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith("Bearer")
-    ) {
-        try {
-            token = req.headers.authorization.split(" ")[1];
-
-            //decodes token id
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-            req.user = await User.findById(decoded.id).select("-password");
-
-            next();
-        } catch (error) {
-            res.status(401);
-            throw new Error("Not authorized, token failed");
-        }
+    // Check for the presence of the Authorization header
+    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer")) {
+        return res.status(401).json({ message: "Not authorized, no token" });
     }
 
-    if (!token) {
-        res.status(401);
-        throw new Error("Not authorized, no token");
+    try {
+        token = req.headers.authorization.split(" ")[1];
+
+        // Decode the token and retrieve user information
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Attach the user information to the request object
+        req.user = await User.findById(decoded.id).select("-password");
+
+        // Move to the next middleware or route handler
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: "Not authorized, token failed" });
     }
 };
-

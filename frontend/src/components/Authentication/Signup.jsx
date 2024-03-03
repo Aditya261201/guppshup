@@ -2,13 +2,13 @@ import React , {useState} from 'react'
 import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react'
 import axios from "axios"
-import {useHistory} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 
 const Signup = () => {
 
     const toast = useToast();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [name, setname] = useState("")
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
@@ -109,7 +109,7 @@ const Signup = () => {
                 position: 'top'
             });
             localStorage.setItem("userInfo",JSON.stringify(data));
-            // history.pushState("http://localhost:4000/api/chat");
+            navigate('/');
             setloading(false);
         } catch (error) {
             toast({

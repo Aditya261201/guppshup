@@ -2,7 +2,7 @@ import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import axios from "axios"
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
 
@@ -10,7 +10,7 @@ const Login = () => {
     const [password, setpassword] = useState("")
     const [loading, setloading] = useState(false)
     const toast = useToast();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const submitHandler = async () =>{
         setloading(true)
@@ -46,6 +46,8 @@ const Login = () => {
                 position: 'top'
             });
             localStorage.setItem("userInfo", JSON.stringify(data));
+            navigate('/chats');
+            console.log("done");
             // history.pushState("http://localhost:4000/api/chat");
             setloading(false);
         } catch (error) {
